@@ -3,17 +3,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 /* eslint-enable no-unused-vars */
 
-class MTableGroupbar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  getItemStyle = (isDragging, draggableStyle) => ({
+function MTableGroupbar(props) {
+  const [state, setState] = useState({});
+  const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: 'none',
     // padding: '8px 16px',
@@ -26,7 +22,7 @@ class MTableGroupbar extends React.Component {
     ...draggableStyle,
   });
 
-  getListStyle = (isDraggingOver) => ({
+  const getListStyle = (isDraggingOver) => ({
     // background: isDraggingOver ? 'lightblue' : '#0000000a',
     background: '#0000000a',
     display: 'flex',
@@ -37,7 +33,7 @@ class MTableGroupbar extends React.Component {
     borderStyle: 'dashed',
   });
 
-  render() {
+  const render = () => {
     return (
       <Toolbar style={{ padding: 0, minHeight: 'unset' }}>
         <Droppable
@@ -48,14 +44,14 @@ class MTableGroupbar extends React.Component {
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
-              style={this.getListStyle(snapshot.isDraggingOver)}
+              style={getListStyle(snapshot.isDraggingOver)}
             >
-              {this.props.groupColumns.length > 0 && (
+              {props.groupColumns.length > 0 && (
                 <Typography variant="caption" style={{ padding: 8 }}>
-                  {this.props.localization.groupedBy}
+                  {props.localization.groupedBy}
                 </Typography>
               )}
-              {this.props.groupColumns.map((columnDef, index) => {
+              {props.groupColumns.map((columnDef, index) => {
                 return (
                   <Draggable
                     key={columnDef.tableData.id}
@@ -67,14 +63,14 @@ class MTableGroupbar extends React.Component {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        style={this.getItemStyle(
+                        style={getItemStyle(
                           snapshot.isDragging,
                           provided.draggableProps.style
                         )}
                       >
                         <Chip
                           {...provided.dragHandleProps}
-                          onClick={() => this.props.onSortChanged(columnDef)}
+                          onClick={() => props.onSortChanged(columnDef)}
                           label={
                             <div
                               style={{ display: 'flex', alignItems: 'center' }}
@@ -83,7 +79,7 @@ class MTableGroupbar extends React.Component {
                                 {columnDef.title}
                               </div>
                               {columnDef.tableData.groupSort && (
-                                <this.props.icons.SortArrow
+                                <props.icons.SortArrow
                                   style={{
                                     transition: '300ms ease all',
                                     transform:
@@ -98,7 +94,7 @@ class MTableGroupbar extends React.Component {
                           }
                           style={{ boxShadow: 'none', textTransform: 'none' }}
                           onDelete={() =>
-                            this.props.onGroupRemoved(columnDef, index)
+                            props.onGroupRemoved(columnDef, index)
                           }
                         />
                       </div>
@@ -106,9 +102,9 @@ class MTableGroupbar extends React.Component {
                   </Draggable>
                 );
               })}
-              {this.props.groupColumns.length === 0 && (
+              {props.groupColumns.length === 0 && (
                 <Typography variant="caption" style={{ padding: 8 }}>
-                  {this.props.localization.placeholder}
+                  {props.localization.placeholder}
                 </Typography>
               )}
               {provided.placeholder}
@@ -117,7 +113,8 @@ class MTableGroupbar extends React.Component {
         </Droppable>
       </Toolbar>
     );
-  }
+  };
+  return render();
 }
 
 MTableGroupbar.defaultProps = {};
