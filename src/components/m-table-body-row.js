@@ -426,8 +426,7 @@ export default function MTableBodyRow(props) {
           onClick={(event) => {
             onRowClick &&
               onRowClick(event, props.data, (panelIndex) => {
-                let panel = (detailPanel =
-                  detailPanel === 'undefined' ? '</>' : detailPanel);
+                let panel = detailPanel;
                 if (Array.isArray(panel)) {
                   panel = panel[panelIndex || 0];
                   if (typeof panel === 'function') {
