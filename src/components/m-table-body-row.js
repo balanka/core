@@ -293,7 +293,9 @@ export default function MTableBodyRow(props) {
               props.onTreeExpandChanged(props.path, props.data);
               event.stopPropagation();
             }}
-          ></IconButton>
+          >
+            <props.icons.DetailPanel />
+          </IconButton>
         </TableCell>
       );
     } else {
@@ -336,9 +338,9 @@ export default function MTableBodyRow(props) {
 
   const render = () => {
     const size = CommonValues.elementSize(props);
-    const renderColumns = renderColumns();
+    const renderColumns_ = renderColumns();
     if (props.options.selection) {
-      renderColumns.splice(0, 0, renderSelectionColumn());
+      renderColumns_.splice(0, 0, renderSelectionColumn());
     }
     if (
       props.actions &&
@@ -347,13 +349,13 @@ export default function MTableBodyRow(props) {
       ).length > 0
     ) {
       if (props.options.actionsColumnIndex === -1) {
-        renderColumns.push(renderActions());
+        renderColumns_.push(renderActions());
       } else if (props.options.actionsColumnIndex >= 0) {
         let endPos = 0;
         if (props.options.selection) {
           endPos = 1;
         }
-        renderColumns.splice(
+        renderColumns_.splice(
           props.options.actionsColumnIndex + endPos,
           0,
           renderActions()
@@ -364,21 +366,21 @@ export default function MTableBodyRow(props) {
     // Then we add detail panel icon
     if (props.detailPanel) {
       if (props.options.detailPanelColumnAlignment === 'right') {
-        renderColumns.push(renderDetailPanelColumn());
+        renderColumns_.push(renderDetailPanelColumn());
       } else {
-        renderColumns.splice(0, 0, renderDetailPanelColumn());
+        renderColumns_.splice(0, 0, renderDetailPanelColumn());
       }
     }
 
     // Lastly we add tree data icon
     if (props.isTreeData) {
-      renderColumns.splice(0, 0, renderTreeDataColumn());
+      renderColumns_.splice(0, 0, renderTreeDataColumn());
     }
 
     props.columns
       .filter((columnDef) => columnDef.tableData.groupOrder > -1)
       .forEach((columnDef) => {
-        renderColumns.splice(
+        renderColumns_.splice(
           0,
           0,
           <TableCell
@@ -438,7 +440,7 @@ export default function MTableBodyRow(props) {
               });
           }}
         >
-          {renderColumns}
+          {renderColumns_}
         </TableRow>
         {props.data.tableData && props.data.tableData.showDetailPanel && (
           <TableRow
@@ -446,7 +448,7 @@ export default function MTableBodyRow(props) {
           >
             <TableCell
               size={size}
-              colSpan={renderColumns.length}
+              colSpan={renderColumns_.length}
               padding="none"
             >
               {props.data.tableData.showDetailPanel(props.data)}
